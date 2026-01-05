@@ -1,15 +1,19 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import Feed from "./Feed";
+import { ReactNode } from "react";
 
-const Index = () => {
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  return <Feed />;
+  return <>{children}</>;
 };
 
-export default Index;
+export default ProtectedRoute;

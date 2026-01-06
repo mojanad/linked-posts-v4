@@ -41,78 +41,80 @@ const CommentCard = ({ comment }: CommentCardProps) => {
   };
 
   return (
-    <div className="flex gap-3 rounded-lg bg-muted/30 p-4">
-      <Link to={`/profile/${author?.id}`}>
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={author?.profilePhoto} alt={author?.name} />
-          <AvatarFallback className="bg-primary text-primary-foreground">
-            {author?.name?.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
-      </Link>
+    <div className="glass-card rounded-2xl p-5 animate-fade-in">
+      <div className="flex gap-4">
+        <Link to={`/profile/${author?.id}`} className="shrink-0">
+          <Avatar className="h-10 w-10 ring-2 ring-primary/10 transition-all duration-300 hover:ring-primary/30">
+            <AvatarImage src={author?.profilePhoto} alt={author?.name} />
+            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-semibold">
+              {author?.name?.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
 
-      <div className="flex-1">
-        <div className="flex items-start justify-between">
-          <div>
-            <Link
-              to={`/profile/${author?.id}`}
-              className="font-medium hover:underline"
-            >
-              {author?.name}
-            </Link>
-            <p className="text-xs text-muted-foreground">
-              {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
-            </p>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <Link
+                to={`/profile/${author?.id}`}
+                className="font-semibold hover:text-primary transition-colors"
+              >
+                {author?.name}
+              </Link>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+              </p>
+            </div>
+
+            {isAuthor && !isEditing && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl text-muted-foreground hover:text-foreground shrink-0">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="glass-card-elevated rounded-xl p-1">
+                  <DropdownMenuItem
+                    onClick={() => setIsEditing(true)}
+                    className="rounded-lg cursor-pointer gap-2"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => deleteComment(comment.id)}
+                    className="rounded-lg cursor-pointer gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
 
-          {isAuthor && !isEditing && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-7 w-7">
-                  <MoreHorizontal className="h-4 w-4" />
+          {isEditing ? (
+            <div className="mt-3 space-y-3 animate-fade-in">
+              <Textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="min-h-[80px] rounded-xl border-0 bg-secondary/50 focus-visible:ring-2 focus-visible:ring-primary/50"
+              />
+              <div className="flex gap-2">
+                <Button size="sm" onClick={handleUpdate} className="btn-gradient rounded-xl gap-1">
+                  <Check className="h-4 w-4" />
+                  Save
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => setIsEditing(true)}
-                  className="cursor-pointer"
-                >
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => deleteComment(comment.id)}
-                  className="cursor-pointer text-destructive focus:text-destructive"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <Button size="sm" variant="outline" onClick={handleCancel} className="rounded-xl gap-1">
+                  <X className="h-4 w-4" />
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <p className="mt-2 text-foreground/90 leading-relaxed">{comment.content}</p>
           )}
         </div>
-
-        {isEditing ? (
-          <div className="mt-2 space-y-2">
-            <Textarea
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="min-h-[60px]"
-            />
-            <div className="flex gap-2">
-              <Button size="sm" onClick={handleUpdate}>
-                <Check className="mr-1 h-4 w-4" />
-                Save
-              </Button>
-              <Button size="sm" variant="outline" onClick={handleCancel}>
-                <X className="mr-1 h-4 w-4" />
-                Cancel
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <p className="mt-1 text-sm text-foreground/90">{comment.content}</p>
-        )}
       </div>
     </div>
   );

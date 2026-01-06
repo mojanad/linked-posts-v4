@@ -2,27 +2,34 @@ import { useData } from "@/contexts/DataContext";
 import Navbar from "@/components/Navbar";
 import PostComposer from "@/components/PostComposer";
 import PostCard from "@/components/PostCard";
+import { FileText } from "lucide-react";
 
 const Feed = () => {
   const { posts } = useData();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen">
       <Navbar />
       
-      <main className="mx-auto max-w-2xl px-4 py-6">
-        <div className="space-y-6">
+      <main className="mx-auto max-w-2xl px-4 py-8">
+        <div className="space-y-6 stagger-children">
           <PostComposer />
           
-          <div className="space-y-4">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
+          <div className="space-y-5">
+            {posts.map((post, index) => (
+              <div key={post.id} style={{ animationDelay: `${0.1 + index * 0.05}s` }}>
+                <PostCard post={post} />
+              </div>
             ))}
           </div>
 
           {posts.length === 0 && (
-            <div className="rounded-lg border border-dashed border-border bg-card/50 p-12 text-center">
-              <p className="text-muted-foreground">No posts yet. Be the first to share something!</p>
+            <div className="glass-card rounded-2xl p-12 text-center animate-fade-in">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
+                <FileText className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="mt-4 font-display text-lg font-semibold">No posts yet</h3>
+              <p className="mt-2 text-muted-foreground">Be the first to share something!</p>
             </div>
           )}
         </div>

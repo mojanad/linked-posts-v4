@@ -3,8 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ImagePlus, X, Send, Sparkles } from "lucide-react";
+import { Image, Hash, Calendar } from "lucide-react";
 import { toast } from "sonner";
 
 const PostComposer = () => {
@@ -22,7 +21,6 @@ const PostComposer = () => {
     }
 
     setIsPosting(true);
-    
     await new Promise((resolve) => setTimeout(resolve, 300));
 
     addPost(user!.id, content.trim(), imageUrl.trim() || undefined);
@@ -34,79 +32,71 @@ const PostComposer = () => {
   };
 
   return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 animate-fade-in">
-      <div className="flex gap-4">
-        <Avatar className="h-12 w-12 ring-2 ring-primary/10 shrink-0">
+    <div className="bg-card rounded-2xl border border-border/50 p-4 animate-fade-in">
+      <div className="flex gap-3">
+        <Avatar className="h-10 w-10">
           <AvatarImage src={user?.profilePhoto} alt={user?.name} />
-          <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-semibold">
+          <AvatarFallback className="bg-primary text-primary-foreground">
             {user?.name?.charAt(0)}
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex-1 space-y-4">
-          <Textarea
-            placeholder="Share your thoughts..."
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="What is happening!?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="min-h-[100px] resize-none rounded-xl border-0 bg-secondary/50 text-base placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-primary/50"
+            className="w-full bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none py-2"
           />
 
           {showImageInput && (
-            <div className="flex items-center gap-2 animate-fade-in">
-              <input
-                type="url"
-                placeholder="Paste image URL..."
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="flex-1 rounded-xl border-0 bg-secondary/50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  setShowImageInput(false);
-                  setImageUrl("");
-                }}
-                className="h-10 w-10 rounded-xl text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
+            <input
+              type="url"
+              placeholder="Paste image URL..."
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              className="w-full bg-secondary/50 rounded-lg px-3 py-2 text-sm mt-2 focus:outline-none focus:ring-1 focus:ring-primary"
+            />
           )}
 
           {imageUrl && (
-            <div className="relative overflow-hidden rounded-xl animate-scale-in">
-              <img
-                src={imageUrl}
-                alt="Preview"
-                className="max-h-48 w-full object-cover"
-                onError={() => setImageUrl("")}
-              />
-            </div>
+            <img
+              src={imageUrl}
+              alt="Preview"
+              className="mt-2 rounded-xl max-h-40 object-cover"
+              onError={() => setImageUrl("")}
+            />
           )}
 
-          <div className="flex items-center justify-between pt-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowImageInput(!showImageInput)}
-              className="rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary gap-2"
-            >
-              <ImagePlus className="h-5 w-5" />
-              <span className="hidden sm:inline">Add image</span>
-            </Button>
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowImageInput(!showImageInput)}
+                className="h-8 gap-1.5 text-muted-foreground hover:text-foreground"
+              >
+                <Image className="h-4 w-4" />
+                <span className="text-xs hidden sm:inline">Media Content</span>
+              </Button>
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-muted-foreground">
+                <Hash className="h-4 w-4" />
+                <span className="text-xs hidden sm:inline">Hashtags</span>
+              </Button>
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-muted-foreground">
+                <Calendar className="h-4 w-4" />
+                <span className="text-xs hidden sm:inline">Schedule</span>
+              </Button>
+            </div>
 
             <Button
               onClick={handleSubmit}
               disabled={!content.trim() || isPosting}
-              className="btn-gradient rounded-xl gap-2 px-5"
+              size="sm"
+              className="h-8 rounded-full px-4"
             >
-              {isPosting ? (
-                <Sparkles className="h-4 w-4 animate-pulse" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-              <span className="hidden sm:inline">Publish</span>
+              Post
             </Button>
           </div>
         </div>

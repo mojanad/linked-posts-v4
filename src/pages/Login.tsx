@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -32,35 +32,20 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      {/* Background decoration */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
-      </div>
-
-      <div className="w-full max-w-md space-y-8 animate-fade-in">
-        {/* Logo & Title */}
-        <div className="flex flex-col items-center text-center">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-glow">
-            <Sparkles className="h-8 w-8 text-primary-foreground" />
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-accent opacity-50 blur-xl" />
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-sm space-y-6 animate-fade-in">
+        <div className="text-center">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary mb-4">
+            <span className="text-xl font-bold text-primary-foreground">C</span>
           </div>
-          <h1 className="mt-6 font-display text-4xl font-bold tracking-tight text-gradient">
-            Welcome back
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            Sign in to continue to Connecta
-          </p>
+          <h1 className="text-2xl font-semibold">Welcome back</h1>
+          <p className="text-sm text-muted-foreground mt-1">Sign in to your account</p>
         </div>
 
-        {/* Form Card */}
-        <div className="glass-card-elevated rounded-3xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="bg-card rounded-2xl border border-border/50 p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email address
-              </Label>
+              <Label htmlFor="email" className="text-sm">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -68,14 +53,12 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12 rounded-xl border-0 bg-secondary/50 px-4 focus-visible:ring-2 focus-visible:ring-primary/50"
+                className="h-10 rounded-xl"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">
-                Password
-              </Label>
+              <Label htmlFor="password" className="text-sm">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -84,49 +67,32 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-12 rounded-xl border-0 bg-secondary/50 px-4 pr-12 focus-visible:ring-2 focus-visible:ring-primary/50"
+                  className="h-10 rounded-xl pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
-            <Button 
-              type="submit" 
-              className="btn-gradient w-full h-12 rounded-xl text-base font-semibold gap-2 group" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Sparkles className="h-5 w-5 animate-pulse" />
-              ) : (
-                <>
-                  Sign in
-                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </>
-              )}
+            <Button type="submit" className="w-full h-10 rounded-xl" disabled={isLoading}>
+              {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <p className="text-center text-sm mt-4">
             <span className="text-muted-foreground">Don't have an account? </span>
-            <Link to="/register" className="font-semibold text-primary hover:underline">
-              Join now
-            </Link>
-          </div>
-        </div>
-
-        {/* Demo hint */}
-        <div className="glass-card rounded-2xl p-4 text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">Demo:</span>{" "}
-            sarah@example.com (any password)
+            <Link to="/register" className="text-primary font-medium">Join</Link>
           </p>
         </div>
+
+        <p className="text-center text-xs text-muted-foreground">
+          Demo: sarah@example.com (any password)
+        </p>
       </div>
     </div>
   );

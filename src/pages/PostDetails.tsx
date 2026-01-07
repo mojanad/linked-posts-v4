@@ -59,50 +59,55 @@ const PostDetails = () => {
 
         <PostCard post={post} showCommentCount={false} />
 
-        {/* Comment Composer */}
-        <div className="bg-card rounded-2xl border border-border/50 p-4 mt-4 animate-fade-in">
-          <div className="flex gap-3">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.profilePhoto} alt={user?.name} />
-              <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                {user?.name?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <Textarea
-                placeholder="Write a comment..."
-                value={commentContent}
-                onChange={(e) => setCommentContent(e.target.value)}
-                className="min-h-[60px] rounded-xl resize-none"
-              />
-              <div className="flex justify-end mt-2">
-                <Button
-                  size="sm"
-                  onClick={handleAddComment}
-                  disabled={!commentContent.trim() || isSubmitting}
-                  className="rounded-full"
-                >
-                  <Send className="h-4 w-4 mr-1" />
-                  Send
-                </Button>
+        {/* Comments Section - Unified */}
+        <div className="bg-card rounded-2xl border border-border/50 mt-4 animate-fade-in overflow-hidden">
+          <div className="px-4 py-3 border-b border-border/50">
+            <p className="text-sm font-medium">{comments.length} Comments</p>
+          </div>
+
+          {/* Comments List */}
+          <div className="divide-y divide-border/50">
+            {comments.length > 0 ? (
+              comments.map((comment) => (
+                <CommentCard key={comment.id} comment={comment} />
+              ))
+            ) : (
+              <div className="p-6 text-center">
+                <p className="text-muted-foreground text-sm">No comments yet. Be the first!</p>
+              </div>
+            )}
+          </div>
+
+          {/* Add Comment - At Bottom */}
+          <div className="p-4 border-t border-border/50 bg-muted/30">
+            <div className="flex gap-3">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user?.profilePhoto} alt={user?.name} />
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                  {user?.name?.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <Textarea
+                  placeholder="Write a comment..."
+                  value={commentContent}
+                  onChange={(e) => setCommentContent(e.target.value)}
+                  className="min-h-[60px] rounded-xl resize-none bg-background"
+                />
+                <div className="flex justify-end mt-2">
+                  <Button
+                    size="sm"
+                    onClick={handleAddComment}
+                    disabled={!commentContent.trim() || isSubmitting}
+                    className="rounded-full"
+                  >
+                    <Send className="h-4 w-4 mr-1" />
+                    Send
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Comments */}
-        <div className="mt-4 space-y-3">
-          <p className="text-sm font-medium">{comments.length} Comments</p>
-          
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <CommentCard key={comment.id} comment={comment} />
-            ))
-          ) : (
-            <div className="bg-card rounded-2xl border border-border/50 p-6 text-center">
-              <p className="text-muted-foreground text-sm">No comments yet</p>
-            </div>
-          )}
         </div>
       </main>
     </div>

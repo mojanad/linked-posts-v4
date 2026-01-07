@@ -41,7 +41,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
   };
 
   return (
-    <div className="bg-card rounded-xl border border-border/50 p-4 animate-fade-in">
+    <div className="p-4">
       <div className="flex gap-3">
         <Link to={`/profile/${author?.id}`}>
           <Avatar className="h-8 w-8">
